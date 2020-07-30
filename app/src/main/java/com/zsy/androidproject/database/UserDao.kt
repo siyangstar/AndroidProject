@@ -2,20 +2,21 @@ package com.zsy.androidproject.database
 
 import androidx.lifecycle.LiveData
 import androidx.room.*
-import com.zsy.androidproject.database.entities.User
+import com.zsy.androidproject.models.UserObject
 
 @Dao
 interface UserDao {
 
-    @Query("SELECT * FROM user_table ORDER BY id ASC")
-    fun getUserList(): LiveData<List<User>>
+    @Query("SELECT * FROM user_table")
+    fun getUserList(): LiveData<List<UserObject>>
 
-    @Query("SELECT * FROM user_table WHERE username == :username")
-    fun getUser(username: String): LiveData<User>
+    @Query("SELECT * FROM user_table WHERE id == :id")
+    fun getUser(id: String): LiveData<UserObject>
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    suspend fun insertUser(user: User)
+    suspend fun insertUser(user: UserObject)
 
     @Update(onConflict = OnConflictStrategy.REPLACE)
-    suspend fun updateUser(user: User)
+    suspend fun updateUser(user: UserObject
+    )
 }
