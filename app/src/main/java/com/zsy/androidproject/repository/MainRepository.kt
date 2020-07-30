@@ -9,6 +9,7 @@ import kotlinx.coroutines.Dispatchers.Main
 
 object MainRepository {
     var job: CompletableJob? = null
+
     fun getUser(userId: String): LiveData<UserObject> {
         job = Job()
         return object : LiveData<UserObject>() {
