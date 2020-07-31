@@ -16,16 +16,18 @@ abstract class ProjectDatabase: RoomDatabase() {
         private var INSTANCE: ProjectDatabase? = null
 
         fun getDatabase(context: Context): ProjectDatabase {
-            if(INSTANCE != null) {
-                return INSTANCE as ProjectDatabase
+            val tempInstance = INSTANCE
+            if(tempInstance != null) {
+                return tempInstance
             }
             synchronized(this) {
-                INSTANCE = Room.databaseBuilder(
+                val tempInstance2 = Room.databaseBuilder(
                     context.applicationContext,
                     ProjectDatabase::class.java,
                     "project_database"
                 ).build()
-                return INSTANCE as ProjectDatabase
+                INSTANCE = tempInstance2
+                return tempInstance2
             }
         }
     }
