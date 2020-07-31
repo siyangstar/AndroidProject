@@ -2,7 +2,7 @@ package com.zsy.androidproject.repository
 
 import androidx.lifecycle.LiveData
 import com.zsy.androidproject.api.MyRetrofitBuilder
-import com.zsy.androidproject.database.UserDao
+import com.zsy.androidproject.database.ProjectDatabase
 import com.zsy.androidproject.models.UserObject
 import kotlinx.coroutines.CompletableJob
 import kotlinx.coroutines.CoroutineScope
@@ -12,14 +12,14 @@ import kotlinx.coroutines.launch
 
 object MainRepository {
     private var job: CompletableJob? = null
-    lateinit var userDao: UserDao
+    lateinit var database: ProjectDatabase
     lateinit var userLiveData: LiveData<UserObject>
 
     /**
      * 初始化数据
      */
     fun fetchUser(userId: String): LiveData<UserObject> {
-        userLiveData = userDao.getUser(userId)
+        userLiveData = database.userDao().getUser(userId)
         return userLiveData
     }
 
@@ -33,7 +33,7 @@ object MainRepository {
                 .launch {
                     try {
                         val user = MyRetrofitBuilder.apiService.getUser(userId)
-                        userDao.insertUser(user)
+                        database.userDao().insertUser(user)
                     } catch (e: Exception) {
                         e.printStackTrace()
                     } finally {

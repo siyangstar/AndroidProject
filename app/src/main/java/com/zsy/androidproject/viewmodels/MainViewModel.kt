@@ -12,8 +12,7 @@ class MainViewModel(application: Application): AndroidViewModel(application) {
     var userObject: LiveData<UserObject>
 
     init {
-        val userDao = ProjectDatabase.getDatabase(application).userDao()
-        MainRepository.userDao = userDao
+        MainRepository.database = ProjectDatabase.getDatabase(application)
         userObject = MainRepository.fetchUser("1") //初始化
     }
 
