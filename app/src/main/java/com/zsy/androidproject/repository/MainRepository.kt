@@ -13,28 +13,32 @@ import kotlinx.coroutines.launch
 object MainRepository {
     private var job: CompletableJob? = null
     lateinit var userDao: UserDao
+    lateinit var userLiveData: LiveData<UserObject>
 
     /**
-     * 获取用户数据
+     * 初始化数据
      */
-    fun getUser(userId: String): LiveData<UserObject> {
-        //从服务器获取
-        getUserFromServer(userId)
-        //返回数据库缓存的数据
-        return userDao.getUser(userId)
+    fun fetchUser(userId: String): LiveData<UserObject> {
+        userLiveData = userDao.getUser(userId)
+        return userLiveData
     }
 
     /**
-     * 开启协程，从服务器获取数据
+     * 开启协程，从服务器更新数据
      */
-    fun getUserFromServer(userId: String) {
+    fun updateUser(userId: String) {
         job = Job()
         job?.let { theJob ->
             CoroutineScope(IO + theJob)
                 .launch {
-                    val user = MyRetrofitBuilder.apiService.getUser(userId)
-                    userDao.insertUser(user)
-                    theJob.complete()
+                    try {
+                        val user = MyRetrofitBuilder.apiService.getUser(userId)
+                        userDao.insertUser(user)
+                    } catch (e: Exception) {
+                        e.printStackTrace()
+                    } finally {
+                        theJob.complete()
+                    }
                 }
         }
     }

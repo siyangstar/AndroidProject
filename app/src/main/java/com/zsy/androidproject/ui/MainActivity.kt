@@ -34,9 +34,7 @@ class MainActivity : AppCompatActivity() {
             println("@@@@@@@@@@@@@@    $it")
         })
 
-        viewModel.setUserId("1")
-
-
+        viewModel.updateUser("1")
     }
 
     override fun onDestroy() {
