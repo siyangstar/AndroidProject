@@ -22,6 +22,7 @@ data class UserObject(
     @ColumnInfo(name = "username")
     val username: String? = null,
 
+    //如果不想在数据库中使用该字段，使用 @Ignore 注解
     @Expose
     @SerializedName("image")
     @ColumnInfo(name = "image")
